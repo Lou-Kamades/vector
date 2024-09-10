@@ -45,7 +45,12 @@ path = "tests/e2e/mod.rs"
 # This results in roughly a 5% reduction in performance when compiling locally vs when
 # compiled via the CI pipeline.
 [profile.release]
-debug = false # Do not include debug symbols in the executable.
+debug = true # Do not include debug symbols in the executable.
+
+[target.x86_64-unknown-linux-gnu]
+linker = "lld"
+rustflags = ["-Clink-arg=-fuse-ld=lld", "-Clink-arg=-Wl,--no-rosegment"]
+
 
 [profile.bench]
 debug = true

@@ -1,0 +1,33 @@
+  data_dir: ${MY_DIR}/data
+  api:
+    enabled: true
+    address: 127.0.0.1:8686
+    playground: false
+  sources:
+    file:
+      type: file
+      include:
+        - ${MY_DIR}/log/*.log
+      read_from: beginning
+  transforms:
+    dedupe:
+      type: dedupe
+      inputs:
+        - file
+      cache:
+        num_events: 15000000
+      fields:
+        match: ["message"]
+  sinks:
+    blackhole:
+      type: blackhole
+      inputs:
+        - dedupe
+      acknowledgements:
+        enabled: true
+    # console:
+    #   type: console
+    #   inputs:
+    #     - file
+    #   encoding:
+    #     codec: json
